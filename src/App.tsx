@@ -1,26 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import { GlobalStyle } from "./styles/global";
+import { Posts } from "./components/Posts";
+import { api } from "./services/api";
+import Modal from "react-modal";
 
-function App() {
+Modal.setAppElement("#root");
+
+export function App() {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    async function getPosts() {
+      const { data: posts } = await api.get("/posts");
+      setPosts(posts);
+    }
+    getPosts();
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Posts posts={posts} />
+      <GlobalStyle />
+    </>
   );
 }
-
-export default App;
